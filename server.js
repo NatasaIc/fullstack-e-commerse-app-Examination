@@ -37,9 +37,29 @@ const getAllProducts = (req, res) => {
   });
 };
 
+const getProduct = (req, res) => {
+  const id = req.params.id * 1;
+  const product = products.find((el) => el.id === id);
+
+  if (!product) {
+    return res.status(404).json({
+      error: 'Not found',
+      message: 'Invalid ID',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      product,
+    },
+  });
+};
+
 // ROUTES
 
 app.route('/api/products').get(getAllProducts);
+app.route('/api/products/:id').get(getProduct);
 
 const port = 3000;
 app.listen(port, () => {
