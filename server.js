@@ -1,5 +1,5 @@
-const fs = require('fs');
 const express = require('express');
+const fs = require('fs');
 const morgan = require('morgan');
 
 const app = express();
@@ -56,9 +56,30 @@ const getProduct = (req, res) => {
   });
 };
 
-// ROUTES
+const createProduct = (req, res) => {
+  //console.log(req.body);
 
-app.route('/api/products').get(getAllProducts);
+  const newId = products[products.lenght - 1].id + 1;
+  const newProduct = Object.assign({ id: newId }, req.body);
+
+  products.push(newProduct);
+
+  fs.writeFile(
+    `${__dirname}/dev-data/products-simple.json`,
+    JSON.stringify(products),
+    (err) => {
+      res.status(201).json({
+        status: 'success',
+        data: {
+          product: newProduct,
+        },
+      });
+    }
+  );
+};
+
+// ROUTES
+app.route('/api/products').get(getAllProducts).post(createProduct);
 app.route('/api/products/:id').get(getProduct);
 
 const port = 3000;
