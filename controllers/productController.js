@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const products = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/products.json`)
+  fs.readFileSync(`${__dirname}/../data/products.json`),
 );
 
 exports.checkID = (req, res, next, val) => {
@@ -52,8 +52,6 @@ exports.getProduct = (req, res) => {
 };
 
 exports.createProduct = (req, res) => {
-  //console.log(req.body);
-
   const newId = products[products.length - 1].id + 1;
   const newProduct = Object.assign({ id: newId }, req.body);
 
@@ -69,7 +67,7 @@ exports.createProduct = (req, res) => {
           product: newProduct,
         },
       });
-    }
+    },
   );
 };
 
