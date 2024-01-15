@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 
 const productRouter = require('./routes/productRoutes');
-// const userRouter = require('./routes/userRoutes');
+const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
@@ -26,6 +26,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/products', productRouter);
-// app.use('/api/users', userRouter);
+app.use('/api/users', userRouter);
 
 module.exports = app;
