@@ -3,8 +3,22 @@ const Product = require('./../models/productModel');
 // ROUTE HANDLERS
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    // BUILD QUERY
+    // 1) Filtering
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
 
+    // 2) Advanced filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    const query = Product.find(JSON.parse(queryStr));
+
+    // EXECUTE QUERY
+    const products = await query;
+
+    // SEND RESPONSE
     res.status(200).json({
       status: 'success',
       results: products.length,
