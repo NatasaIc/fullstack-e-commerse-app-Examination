@@ -3,8 +3,8 @@ const APIFeatures = require('./../utils/apiFeatures');
 
 exports.aliasTopProducts = (req, res, next) => {
   req.query.limit = '5';
-  req.query.sort = '-ratingsAverage,price';
-  req.query.fields = 'name,price,ratingsAverage,short_description,brand';
+  req.query.sort = '-rating,price';
+  req.query.fields = 'name,price,rating,short_description,brand';
   next();
 };
 
@@ -65,7 +65,7 @@ exports.createProduct = async (req, res) => {
   } catch (err) {
     res.status(400).json({
       status: 'fail',
-      message: 'Invalid data sent!',
+      message: err,
     });
   }
 };
@@ -101,6 +101,41 @@ exports.deleteProduct = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'Fail',
+      message: err,
+    });
+  }
+};
+
+exports.getProductStats = async (req, res) => {
+  try {
+    const stats = await Product.aggregate([
+      {
+        $match: { rating: { $gte: 4.2 } },
+      },
+      {
+        $group: {
+          _id: { $toUpper: '$category' },
+          numProducts: { $sum: 1 },
+          avgRating: { $avg: '$rating' },
+          avgPrice: { $avg: '$price' },
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
+        },
+      },
+      {
+        $sort: { avgPrice: 1 },
+      },
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        stats,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
       message: err,
     });
   }
