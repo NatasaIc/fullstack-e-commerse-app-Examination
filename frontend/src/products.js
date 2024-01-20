@@ -1,8 +1,8 @@
 const products = [
   {
-    id: 1,
+    _id: 1,
     name: 'All in One Miracle Serum',
-    image: 'all_in_one_miracle_serum.jpg',
+    image: './assets/images/All_in_one_miracle_serum.jpg',
     short_description:
       'Experience the magic of our All in One Miracle Serum for radiant and youthful skin.',
     long_description:
@@ -15,7 +15,7 @@ const products = [
     numReviews: 10,
   },
   {
-    id: 2,
+    _id: 2,
     name: 'Rosehip Oil',
     image: 'rosehip_oil.jpg',
     short_description:
@@ -30,9 +30,9 @@ const products = [
     numReviews: 8,
   },
   {
-    id: 3,
+    _id: 3,
     name: 'Organic Glow Foundation',
-    image: 'foundation.jpg',
+    image: 'foundation_3.jpg',
     short_description: 'A natural mineral foundation for a flawless look.',
     long_description:
       'Achieve a radiant complexion with our Organic Mineral Foundation. Made with pure, organic minerals, this foundation provides buildable coverage while nourishing your skin.',
@@ -44,7 +44,7 @@ const products = [
     numReviews: 12,
   },
   {
-    id: 4,
+    _id: 4,
     name: 'All-Natural Lip Balm',
     image: 'lip_balm.jpg',
     short_description: 'Hydrating lip balm with organic ingredients.',
@@ -58,7 +58,7 @@ const products = [
     numReviews: 13,
   },
   {
-    id: 5,
+    _id: 5,
     name: 'Natural Fiber Blush Brush',
     image: 'blush_brush.jpg',
     short_description:
@@ -73,7 +73,7 @@ const products = [
     numReviews: 8,
   },
   {
-    id: 6,
+    _id: 6,
     name: 'Eco-Friendly Bamboo Eyebrow Brush',
     image: 'bamboo_eyebrow_brush.jpg',
     short_description: 'Shape and define your eyebrows with our bamboo brush.',
@@ -87,7 +87,7 @@ const products = [
     numReviews: 12,
   },
   {
-    id: 7,
+    _id: 7,
     name: 'Bamboo Dry Body Brush',
     image: 'bamboo_body_brush.jpg',
     short_description:
@@ -102,7 +102,7 @@ const products = [
     numReviews: 15,
   },
   {
-    id: 8,
+    _id: 8,
     name: 'Fur Mitt Trio',
     image: 'fur_mitt_trio.jpg',
     short_description:
@@ -117,7 +117,7 @@ const products = [
     numReviews: 12,
   },
   {
-    id: 9,
+    _id: 9,
     name: 'Cotton Face Pads',
     image: 'cotton_face_pads.jpg',
     short_description:
@@ -132,7 +132,7 @@ const products = [
     numReviews: 16,
   },
   {
-    id: 10,
+    _id: 10,
     name: 'Summer Solstice Lipstick',
     image: 'summer_solstice_lipstick.jpg',
     short_description:
@@ -147,7 +147,7 @@ const products = [
     numReviews: 10,
   },
   {
-    id: 11,
+    _id: 11,
     name: 'Sugar Body Polish Scrub',
     image: 'sugar_body_polish_scrub.jpg',
     short_description:
@@ -162,7 +162,7 @@ const products = [
     numReviews: 8,
   },
   {
-    id: 12,
+    _id: 12,
     name: 'Marble Dry Body Brush',
     image: 'marble_dry_body_brush.jpg',
     short_description:
