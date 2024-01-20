@@ -1,9 +1,9 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Product = require('./../models/productModel');
+const Product = require('../models/productModel');
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: '../../config.env' });
 
 const DB = process.env.MONGO_URI;
 
