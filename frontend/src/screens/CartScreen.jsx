@@ -12,6 +12,7 @@ import {
 import { FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
 import { addToCart } from '../slices/cartSlice';
+import { removeFromCart } from '../slices/cartSlice';
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -23,6 +24,11 @@ const CartScreen = () => {
   const handleAddToCart = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
   };
+
+  const handleRemoveFromCart = async (id) => {
+    dispatch(removeFromCart(id));
+  };
+
   return (
     <Row>
       <Col md={8}>
@@ -59,7 +65,11 @@ const CartScreen = () => {
                     </Form.Control>
                   </Col>
                   <Col md={2}>
-                    <Button type="button" variant="light">
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => handleRemoveFromCart(item._id)}
+                    >
                       <FaTrash />
                     </Button>
                   </Col>
