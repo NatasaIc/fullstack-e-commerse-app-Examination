@@ -6,10 +6,10 @@ const router = express.Router();
 router
   .route('/')
   .get(userController.getAllUsers)
-  .post(userController.createUser);
+  .post(userController.registerUser);
 router
   .route('/:id')
-  .get(userController.createUser)
+  .get(userController.getUser)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
 

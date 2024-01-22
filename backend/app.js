@@ -1,5 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
+const notFound = require('./middleware/errorMiddleware');
+const errorHandler = require('./middleware/errorMiddleware');
 
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -13,12 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json());
-// app.use(express.static(`${__dirname}/public`));
-
-app.use((req, res, next) => {
-  console.log('Hello from the middleware');
-  next();
-});
+app.use(express.static(`${__dirname}/frontend/public`));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -28,4 +25,6 @@ app.use((req, res, next) => {
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 
+app.use(notFound);
+app.use(errorHandler);
 module.exports = app;
