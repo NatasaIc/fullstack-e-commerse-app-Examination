@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start:dev": "nodemon backend/server.js",
-    "start:prod": "NODE_ENV=production&&nodemon backend/server.js",
-    "debug": "ndb backend/server.js"
+    "start:prod": "NODE_ENV=production&&nodemon backend/server.js"
   },
   "keywords": [],
   "author": "Natasa Iconomou",

@@ -1,52 +1,39 @@
 const mongoose = require('mongoose');
-const slugify = require('slugify');
 
-// const reviewSchema = mongoose.Schema(
-//   {
-//     user: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       required: true,
-//       ref: 'User',
-//     },
-//     name: {
-//       type: String,
-//       required: true,
-//     },
-//     rating: {
-//       type: Number,
-//       required: true,
-//     },
-//     comment: {
-//       type: String,
-//       required: true,
-//       trim: true,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   },
-// );
+const reviewSchema = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    rating: { type: Number, required: true },
+    comment: { type: String, required: true },
+    photo: { type: String },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
 const productSchema = new mongoose.Schema(
   {
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   required: true,
-    //   ref: 'User',
-    // },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
     name: {
       type: String,
       required: [true, 'A product must have a name'],
       unique: true,
     },
-    slug: String,
     image: {
       type: String,
       required: true,
     },
     short_description: {
       type: String,
-      maxlength: [100, 'A product name must have less or equal 100 characters'],
       required: true,
     },
     long_description: {
@@ -80,10 +67,10 @@ const productSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
-    // reviews: [reviewSchema],
+    reviews: [reviewSchema],
     rating: {
       type: Number,
-      default: 4.5,
+      default: 0,
       min: [1, 'Rating must be abouve 1.0'],
       max: [5, 'Rating nust be below 5.0'],
     },
@@ -99,10 +86,10 @@ const productSchema = new mongoose.Schema(
 );
 
 // DOCUMENT MIDDLEWARE: runs before.save() and .create()
-productSchema.pre('save', function (next) {
-  this.slug = slugify(this.name, { lower: true });
-  next();
-});
+// productSchema.pre('save', function (next) {
+//   this.slug = slugify(this.name, { lower: true });
+//   next();
+// });
 
 const Product = mongoose.model('Product', productSchema);
 

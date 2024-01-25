@@ -20,14 +20,14 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Please provide a password'],
       minLength: [8, 'Password should be at least 8 characters'],
     },
-    passwordConfirm: {
-      type: String,
-      required: [true, 'Please confirm your password'],
-    },
     isAdmin: {
       type: Boolean,
       required: true,
       default: false,
+    },
+    productId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Product',
     },
   },
   {
