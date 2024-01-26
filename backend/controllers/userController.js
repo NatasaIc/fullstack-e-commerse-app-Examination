@@ -1,11 +1,37 @@
 const User = require('../models/userModel');
 const asyncHandler = require('../middleware/asyncHandler');
+const jwt = require('jsonwebtoken');
 
 // @desc    Auth user & get token
 // @route   GET /api/users/login
 // @access  Public
 exports.authUser = asyncHandler(async (req, res, next) => {
-  res.send('auth user');
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (user && (await user.matchPassword(password))) {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '30d',
+    });
+
+    // Set JWT as HTTP-Only cookie
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 1000, // 30 Days
+    });
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(401);
+    throw new Error('Invalid Email or Password');
+  }
 });
 
 // @desc    Register user

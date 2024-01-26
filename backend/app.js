@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const notFound = require('./middleware/errorMiddleware');
 const errorHandler = require('./middleware/errorMiddleware');
@@ -14,7 +15,13 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+// body parser middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Cookie parser middleware
+app.use(cookieParser());
+
 app.use(express.static(`${__dirname}/frontend/public`));
 
 app.use((req, res, next) => {

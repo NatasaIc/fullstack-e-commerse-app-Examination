@@ -1,6 +1,6 @@
 const express = require('express');
 const userController = require('../controllers/userController');
-
+const { protect, admin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Routes for login and logout
@@ -10,8 +10,8 @@ router.post('/logout', userController.logoutUser);
 // Routes for user profile
 router
   .route('/profile')
-  .get(userController.getUserProfile)
-  .patch(userController.updateUserProfile);
+  .get(protect, userController.getUserProfile)
+  .patch(protect, userController.updateUserProfile);
 
 // Routes for all users and individual user by ID
 router

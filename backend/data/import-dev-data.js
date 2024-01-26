@@ -1,7 +1,9 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const products = require('./products');
 const Product = require('../models/productModel');
+const users = require('./users');
 const User = require('../models/userModel');
 const Order = require('../models/orderModel');
 
@@ -15,14 +17,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log('Connection successful'));
-
-// READ JSON FILE
-const products = JSON.parse(
-  fs.readFileSync(`${__dirname}/products.json`, 'utf-8'),
-);
-
-const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
-
 // IMPORT DATA INTO DATABASE
 const importData = async () => {
   try {
@@ -42,7 +36,7 @@ const importData = async () => {
 
     process.exit();
   } catch (error) {
-    console.error(err);
+    console.error(error);
     process.exit(1);
   }
 };
@@ -56,7 +50,7 @@ const deleteData = async () => {
     console.log('Data Destroyed!');
     process.exit();
   } catch (error) {
-    console.error(err);
+    console.error(error);
     process.exit(1);
   }
 };
