@@ -17,10 +17,10 @@ if (process.env.NODE_ENV === 'development') {
 
 // body parser middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Cookie parser middleware
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(`${__dirname}/frontend/public`));
 

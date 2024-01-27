@@ -16,12 +16,12 @@ router
 // Routes for all users and individual user by ID
 router
   .route('/')
-  .get(userController.getAllUsers)
+  .get(protect, admin, userController.getAllUsers)
   .post(userController.registerUser);
 router
   .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(protect, admin, userController.getUser)
+  .patch(protect, admin, userController.updateUser)
+  .delete(protect, admin, userController.deleteUser);
 
 module.exports = router;

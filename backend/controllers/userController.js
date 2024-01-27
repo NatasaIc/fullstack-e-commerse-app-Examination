@@ -1,6 +1,6 @@
-const User = require('../models/userModel');
 const asyncHandler = require('../middleware/asyncHandler');
-const jwt = require('jsonwebtoken');
+const User = require('../models/userModel');
+const generateToken = require('../utils/generateToken');
 
 // @desc    Auth user & get token
 // @route   GET /api/users/login
@@ -8,21 +8,13 @@ const jwt = require('jsonwebtoken');
 exports.authUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  let user = await User.findOne({ email });
+
   if (user && (await user.matchPassword(password))) {
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '30d',
-    });
+    // Generate the token and set it in the response cookie.
+    generateToken(res, user._id);
 
-    // Set JWT as HTTP-Only cookie
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
-      sameSite: 'strict',
-      maxAge: 30 * 24 * 60 * 1000, // 30 Days
-    });
-
-    res.json({
+    res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -38,28 +30,89 @@ exports.authUser = asyncHandler(async (req, res, next) => {
 // @route   POST /api/users
 // @access  Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
-  res.send('register user');
+  const { name, email, password } = req.body;
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error('Email already exists');
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+
+  if (user) {
+    generateToken(res, user._id);
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
+  }
 });
 
 // @desc    Logout user / clear cookie user
 // @route   POST /api/users/logout
 // @access  Privet
 exports.logoutUser = asyncHandler(async (req, res, next) => {
-  res.send('logout user');
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ meassage: 'Logged out successfully' });
 });
 
 // @desc    Get user profile
 // @route   Get /api/users/profile
 // @access  Public
 exports.getUserProfile = asyncHandler(async (req, res, next) => {
-  res.send('get user profile');
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('No user found');
+  }
 });
 
 // @desc    Update user profile
 // @route   PATCH /api/users/profile
 // @access  Privet
 exports.updateUserProfile = asyncHandler(async (req, res, next) => {
-  res.send('Update user profile');
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found!');
+  }
 });
 
 // @desc    Get Users
