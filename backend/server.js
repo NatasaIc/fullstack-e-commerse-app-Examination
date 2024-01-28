@@ -10,7 +10,8 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log('Connection successful'));
+  .then(() => console.log('Connection successful'))
+  .catch((error) => console.error('Database connection error:', error));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -4,7 +4,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Routes for login and logout
-router.post('/login', userController.authUser);
+router.post('/auth', userController.authUser);
 router.post('/logout', userController.logoutUser);
 
 // Routes for user profile

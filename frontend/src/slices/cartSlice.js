@@ -4,7 +4,7 @@ import { upateCart } from '../utils/cartUtils';
 // Retrieve the cart data from local storage or initialize an empty cart
 const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))
-  : { cartItems: [] };
+  : { cartItems: [], shippingAddress: {}, paymentMethod: 'Paypal' };
 
 // Create a slice of the Redux store for the cart
 const cartSlice = createSlice({
@@ -34,9 +34,14 @@ const cartSlice = createSlice({
 
       return upateCart(state);
     },
+    saveShippingAddress: (state, action) => {
+      state.shippingAddress = action.payload;
+      return upateCart(state);
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, saveShippingAddress } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

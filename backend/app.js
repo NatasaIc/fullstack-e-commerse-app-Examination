@@ -1,8 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const notFound = require('./middleware/errorMiddleware');
-const errorHandler = require('./middleware/errorMiddleware');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -22,7 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(`${__dirname}/frontend/public`));
+// app.use(express.static(`${__dirname}/frontend/public`));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
