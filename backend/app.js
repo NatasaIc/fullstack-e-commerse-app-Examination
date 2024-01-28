@@ -5,6 +5,7 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
+app.use('/api/orders', orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
