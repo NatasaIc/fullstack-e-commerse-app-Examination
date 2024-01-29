@@ -2,25 +2,30 @@ import { useNavigate } from 'react-router-dom';
 import { Badge, Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
-import { UseSelector, useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import { logout } from '../slices/authSlice';
 import logo from '../assets/E (3).png';
 
 const Header = () => {
+  // Extracting 'cartItems' and 'userInfo' from the Redux store
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
+  // Initializing Redux dispatch and React Router's 'useNavigate' hook
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Using the 'useLogoutMutation' hook from the 'usersApiSlice' to handle logging out of an account
   const [logoutApiCall] = useLogoutMutation();
 
+  // Handling user logout
   const handleLogout = async () => {
     try {
+      // Making a logout API call and updating the Redux store upon successful logout
       await logoutApiCall().unwrap();
       dispatch(logout());
+      // Navigating to the login page after logout
       navigate('/login');
     } catch (err) {
       console.log(err);

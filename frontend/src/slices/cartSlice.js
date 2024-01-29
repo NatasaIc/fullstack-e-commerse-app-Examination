@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { upateCart } from '../utils/cartUtils';
+import { updateCart } from '../utils/cartUtils';
 
 // Retrieve the cart data from local storage or initialize an empty cart
 const initialState = localStorage.getItem('cart')
@@ -26,21 +26,29 @@ const cartSlice = createSlice({
         state.cartItems = [...state.cartItems, item];
       }
 
-      return upateCart(state);
+      return updateCart(state);
     },
     removeFromCart: (state, action) => {
       // Find and remove the specified item from the cart
       state.cartItems = state.cartItems.filter((x) => x._id !== action.payload);
 
-      return upateCart(state);
+      return updateCart(state);
     },
+    // Reducer to save the shipping address in the cart state
     saveShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
-      return upateCart(state);
+      return updateCart(state);
     },
+    // Reducer to save the payment method in the cart state
     savePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
-      return upateCart(state);
+      // Update the cart in local storage and return the updated state
+      return updateCart(state);
+    },
+    // Reducer to clear all cart items
+    clearCartItems: (state, action) => {
+      state.cartItems = [];
+      return updateCart(state);
     },
   },
 });
@@ -50,6 +58,7 @@ export const {
   removeFromCart,
   saveShippingAddress,
   savePaymentMethod,
+  clearCartItems,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

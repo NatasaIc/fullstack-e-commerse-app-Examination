@@ -10,9 +10,9 @@ router
 
 router.route('/myorder').get(protect, orderController.getMyOrders);
 router.route('/:id').get(protect, admin, orderController.getOrderById);
-router.route('/:id/pay').put(protect, orderController.updateOrderToPaid);
+router.route('/:id/pay').patch(protect, orderController.updateOrderToPaid);
 router
   .route('/:id/deliver')
-  .put(protect, admin, orderController.updateOrderToDelivered);
+  .patch(protect, admin, orderController.updateOrderToDelivered);
 
 module.exports = router;

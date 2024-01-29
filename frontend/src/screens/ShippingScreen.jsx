@@ -7,9 +7,11 @@ import { saveShippingAddress } from '../slices/cartSlice';
 import CheckoutSteps from '../components/CheckoutSteps';
 
 const ShippingScreen = () => {
+  // Accessing shipping address information from the Redux store
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 
+  // Setting up state variables for form input fields with initial values from the Redux store
   const [address, setAddress] = useState(shippingAddress?.address || '');
   const [city, setCity] = useState(shippingAddress?.city || '');
   const [postalCode, setPostalCode] = useState(
@@ -17,11 +19,14 @@ const ShippingScreen = () => {
   );
   const [country, setCountry] = useState(shippingAddress?.country || '');
 
+  // Accessing navigation and dispatch functions from the 'react-router-dom' and 'react-redux' libraries
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Handling form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Dispatching an action to save the shipping address in the Redux store
     dispatch(saveShippingAddress({ address, city, postalCode, country }));
     navigate('/payment');
   };

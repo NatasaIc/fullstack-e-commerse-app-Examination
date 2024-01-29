@@ -9,35 +9,45 @@ import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
 
 const RegisterScreen = () => {
+  // State variables for user registration form inputs
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  // Accessing navigation and dispatch functions from the 'react-router-dom' and 'react-redux' libraries
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Using the 'useRegisterMutation' hook to perform user registration
   const [register, { isLoading }] = useRegisterMutation();
 
+  // Accessing user information from the Redux store
   const { userInfo } = useSelector((state) => state.auth);
 
+  // Extracting 'redirect' query parameter from the current location
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get('redirect') || '/';
 
+  // Redirecting to the specified path if the user is already authenticated
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
   }, [userInfo, redirect, navigate]);
 
+  // Handling form submission for user registration
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Checking if passwords match before sending the registration request
     if (password !== confirmPassword) {
       toast.error('Passwords do not match!');
       return;
     } else {
       try {
+        // Calling the 'register' mutation and updating the Redux store with user credentials
+        //The nwrap method is used to extract the payload from the resolved value of a mutation
         const res = await register({ name, email, password }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate(redirect);
