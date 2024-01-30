@@ -5,7 +5,17 @@ const Order = require('../models/orderModel');
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
-exports.addItemsToOrder = asyncHandler(async (req, res, next) => {
+exports.addItemsToOrder = asyncHandler(async (req, res) => {
+  const {
+    orderItems,
+    shippingAddress,
+    paymentMethod,
+    itemsPrice,
+    taxPrice,
+    shippingPrice,
+    totalPrice,
+  } = req.body;
+
   if (orderItems && orderItems.lenght === 0) {
     res.status(400);
     throw new Error('No order Items');
@@ -32,7 +42,7 @@ exports.addItemsToOrder = asyncHandler(async (req, res, next) => {
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
-exports.getMyOrders = asyncHandler(async (req, res, next) => {
+exports.getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
   res.status(200).json(orders);
 });
@@ -40,7 +50,7 @@ exports.getMyOrders = asyncHandler(async (req, res, next) => {
 // @desc    Get order by Id
 // @route   GET /api/orders/:id
 // @access  Private
-exports.getOrderById = asyncHandler(async (req, res, next) => {
+exports.getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
     'user',
     'name email',
@@ -56,20 +66,20 @@ exports.getOrderById = asyncHandler(async (req, res, next) => {
 // @desc    Update order to paid
 // @route   GET /api/orders/:id/pay
 // @access  Private
-exports.updateOrderToPaid = asyncHandler(async (req, res, next) => {
+exports.updateOrderToPaid = asyncHandler(async (req, res) => {
   res.send('update order to paid');
 });
 
 // @desc    Update to delivered
 // @route   GET /api/orders/:id/deliver
 // @access  Private/Admin
-exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
+exports.updateOrderToDelivered = asyncHandler(async (req, res) => {
   res.send('update order to delivered');
 });
 
 // @desc    Get all orders
 // @route   GET /api/orders
 // @access  Private/Admin
-exports.getAllOrders = asyncHandler(async (req, res, next) => {
+exports.getAllOrders = asyncHandler(async (req, res) => {
   res.send('Get all orders');
 });
