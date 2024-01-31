@@ -8,7 +8,7 @@ router
   .post(protect, orderController.addItemsToOrder)
   .get(protect, admin, orderController.getAllOrders);
 
-router.route('/myorder').get(protect, orderController.getMyOrders);
+router.route('/myorders').get(protect, orderController.getMyOrders);
 router.route('/:id').get(protect, orderController.getOrderById);
 router.route('/:id/pay').patch(protect, orderController.updateOrderToPaid);
 router
