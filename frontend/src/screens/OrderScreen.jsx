@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
   useGetPaypalClientIdQuery,
+  useDeliverOrderMutation,
 } from '../slices/ordersApiSlice';
 
 const OrderScreen = () => {
@@ -16,11 +18,14 @@ const OrderScreen = () => {
   const {
     data: order,
     refetch,
-    isLoading,
-    error,
+    isLoading: loadingOrder,
+    error: errorOrder,
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -30,7 +35,7 @@ const OrderScreen = () => {
     error: errorPaypal,
   } = useGetPaypalClientIdQuery();
 
-  // const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!errorPaypal && !loadingPayPal && paypal.clientId) {
@@ -90,9 +95,19 @@ const OrderScreen = () => {
       });
   }
 
-  return isLoading ? (
+  const handleDeliverOrder = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success('Order delivered');
+    } catch (err) {
+      toast.error(err?.data?.massage || err.message);
+    }
+  };
+
+  return loadingOrder ? (
     <Loader />
-  ) : error ? (
+  ) : errorOrder ? (
     <Message variant="danger" />
   ) : (
     <>
@@ -135,23 +150,37 @@ const OrderScreen = () => {
                 )}
               </h2>
             </ListGroup.Item>
+
             <ListGroup.Item>
               <h2>Order Items</h2>
-              {order.orderItems.map((item, index) => (
-                <ListGroup.Item key={index}>
-                  <Row>
-                    <Col md={1}>
-                      <Image src={item.image} alt={item.name} fluid rounded />
-                    </Col>
-                    <Col>
-                      <Link to={`/product/${item.product}`}>{item.name}</Link>
-                    </Col>
-                    <Col md={4}>
-                      {item.qty} x ${item.price} = ${item.qty * item.price}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
+              {order.orderItems.length === 0 ? (
+                <Message>No items in this order</Message>
+              ) : (
+                <ListGroup variant="flush">
+                  {order.orderItems.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <Row>
+                        <Col md={1}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fluid
+                            rounded
+                          />
+                        </Col>
+                        <Col>
+                          <Link to={`/product/${item.product}`}>
+                            {item.name}
+                          </Link>
+                        </Col>
+                        <Col md={4}>
+                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              )}
             </ListGroup.Item>
           </ListGroup>
         </Col>
@@ -207,7 +236,22 @@ const OrderScreen = () => {
                   )}
                 </ListGroup.Item>
               )}
-              {/*Mark as delivered placeholder */}
+              {loadingDeliver && <Loader />}
+
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={handleDeliverOrder}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
