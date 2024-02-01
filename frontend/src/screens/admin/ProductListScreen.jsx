@@ -6,6 +6,8 @@ import Loader from '../../components/Loader';
 import { useGetProductsQuery } from '../../slices/productsApiSlice';
 
 const ProductListScreen = () => {
+  const { data: products, isLoading, error } = useGetProductsQuery();
+
   return <div>ProductListScreen</div>;
 };
 
