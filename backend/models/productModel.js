@@ -32,11 +32,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    short_description: {
-      type: String,
-      required: true,
-    },
-    long_description: {
+    description: {
       type: String,
       required: true,
     },
@@ -71,8 +67,6 @@ const productSchema = new mongoose.Schema(
     rating: {
       type: Number,
       default: 0,
-      min: [1, 'Rating must be abouve 1.0'],
-      max: [5, 'Rating nust be below 5.0'],
     },
     numReviews: {
       type: Number,

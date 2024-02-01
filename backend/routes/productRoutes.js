@@ -13,11 +13,11 @@ router.route('/product-stats').get(productController.getProductStats);
 router
   .route('/')
   .get(productController.getAllProducts)
-  .post(productController.createProduct);
+  .post(protect, admin, productController.createProduct);
 router
   .route('/:id')
-  .get(productController.getProduct)
-  .patch(productController.updateProduct)
+  .get(productController.getProductById)
+  .patch(protect, admin, productController.updateProduct)
   .delete(productController.deleteProduct);
 
 module.exports = router;

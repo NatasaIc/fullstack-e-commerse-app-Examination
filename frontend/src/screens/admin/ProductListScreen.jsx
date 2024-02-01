@@ -3,10 +3,34 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useGetProductsQuery } from '../../slices/productsApiSlice';
+import {
+  useGetProductsQuery,
+  useCreateProductMutation,
+} from '../../slices/productsApiSlice';
+import { toast } from 'react-toastify';
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data, isLoading, error, refetch } = useGetProductsQuery();
+  const products = data?.data?.products || [];
+
+  const handleDelete = (id) => {
+    console.log('delete', id);
+  };
+
+  const [createProduct, { isLoading: loadingCreate }] =
+    useCreateProductMutation();
+
+  const handleCreateProduct = async () => {
+    if (window.confirm('Are you sure you want to create a new product?')) {
+    }
+    try {
+      await createProduct();
+      refetch();
+    } catch (err) {
+      console.error('Error creating product:', err);
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   return (
     <>
@@ -15,12 +39,12 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm m3">
+          <Button className="btn-sm m3" onClick={handleCreateProduct}>
             <FaEdit /> Create Product
           </Button>
         </Col>
       </Row>
-
+      {loadingCreate && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -39,7 +63,7 @@ const ProductListScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(products) ? (
+              {Array.isArray(products) &&
                 products.map((product) => (
                   <tr key={product._id}>
                     <td>{product._id}</td>
@@ -53,14 +77,16 @@ const ProductListScreen = () => {
                           <FaEdit />
                         </Button>
                       </LinkContainer>
+                      <Button
+                        variant="danger"
+                        className="btn-sm"
+                        onClick={() => handleDelete(product._id)}
+                      >
+                        <FaTrash style={{ color: 'white' }} />
+                      </Button>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6">No products available</td>
-                </tr>
-              )}
+                ))}
             </tbody>
           </Table>
         </>

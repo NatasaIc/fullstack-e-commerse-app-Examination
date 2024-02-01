@@ -38,7 +38,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 // @desc    Fetch a product
 // @route   GET /api/products/:id
 // @access  Public
-exports.getProduct = asyncHandler(async (req, res, next) => {
+exports.getProductById = asyncHandler(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
   res.status(200).json({
@@ -53,29 +53,47 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 // @route   POST /api/products
 // @access  Public
 exports.createProduct = asyncHandler(async (req, res, next) => {
-  const newProduct = await Product.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      product: newProduct,
-    },
+  const product = new Product({
+    name: 'Sample name',
+    price: 0,
+    user: req.user._id,
+    image: '/images/sample.jpg',
+    brand: 'Sample brand',
+    category: 'Sample category',
+    countInStock: 0,
+    numReviews: 0,
+    description: 'Sample description',
   });
+
+  const createdProduct = await product.save();
+  res.status(201).json(createdProduct);
 });
 
 // @desc    Update a product
 // @route   PATCH /api/products/:id
 // @access  Public
 exports.updateProduct = asyncHandler(async (req, res, next) => {
-  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({
-    status: 'sucess',
-    data: {
-      product,
-    },
-  });
+  console.log('Authenticated User:', req.user);
+  const { name, price, description, image, brand, category, countInStock } =
+    req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    product.name = name;
+    product.price = price;
+    product.description = description;
+    product.image = image;
+    product.brand = brand;
+    product.category = category;
+    product.countInStock = countInStock;
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
 });
 
 // @desc    Delete a product

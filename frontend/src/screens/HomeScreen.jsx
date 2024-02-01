@@ -10,7 +10,6 @@ const HomeScreen = () => {
   // Extracting the 'products' array from the fetched data, or initializing it as an empty array
   const products = data?.data?.products || [];
 
-  console.log('Products:', products);
   return (
     <>
       {isLoading ? (
