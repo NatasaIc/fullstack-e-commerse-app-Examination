@@ -1,11 +1,13 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const path = require('path');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 
@@ -22,8 +24,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use(express.static(`${__dirname}/frontend/public`));
-
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
@@ -32,10 +32,13 @@ app.use((req, res, next) => {
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRoutes);
+app.use('/api/upload', uploadRoutes);
 
 app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: PAYPAL_CLIENT_ID }),
 );
+
+app.use('/uploads', express.static(path.join(process.cwd(), '/uploads')));
 
 app.use(notFound);
 app.use(errorHandler);

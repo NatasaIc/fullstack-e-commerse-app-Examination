@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import {
   useUpdateProductMutation,
   useGetProductDetailsQuery,
+  useUploadProductImageMutation,
 } from '../../slices/productsApiSlice';
 
 const ProductEditScreen = () => {
@@ -30,6 +31,9 @@ const ProductEditScreen = () => {
 
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
+
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -54,8 +58,21 @@ const ProductEditScreen = () => {
     }
   };
 
+  const handleUploadFile = async (e) => {
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
   useEffect(() => {
     if (product) {
+      console.log(product);
       setName(product.name || '');
       setPrice(product.price || 0);
       setImage(product.image || '');
@@ -100,7 +117,21 @@ const ProductEditScreen = () => {
               />
             </Form.Group>
 
-            {/*Image placeholder*/}
+            <Form.Group controlId="image" className="my-3">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Eneter image url"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
+              <Form.Control
+                type="file"
+                placeholder="Choose file"
+                onChange={handleUploadFile}
+              />
+            </Form.Group>
+
             <Form.Group controlId="brand" className="my-3">
               <Form.Label>Brand</Form.Label>
               <Form.Control
@@ -140,6 +171,7 @@ const ProductEditScreen = () => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Form.Group>
+
             <Button type="submit" variant="primary" className="my-3">
               Update
             </Button>
