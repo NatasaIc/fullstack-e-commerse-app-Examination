@@ -5,7 +5,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 // ROUTES
 const router = express.Router();
 router
-  .route('/top-5-cheap')
+  .route('/top')
   .get(productController.aliasTopProducts, productController.getAllProducts);
 
 router.route('/product-stats').get(productController.getProductStats);
@@ -15,9 +15,10 @@ router
   .get(productController.getAllProducts)
   .post(protect, admin, productController.createProduct);
 router
+
   .route('/:id')
   .get(productController.getProductById)
   .patch(protect, admin, productController.updateProduct)
-  .delete(productController.deleteProduct);
+  .delete(protect, admin, productController.deleteProduct);
 
 module.exports = router;

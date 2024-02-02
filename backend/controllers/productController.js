@@ -2,10 +2,13 @@ const Product = require('../models/productModel');
 const APIFeatures = require('../utils/apiFeatures');
 const asyncHandler = require('../middleware/asyncHandler');
 
+// @desc    Get top products
+// @route   GET /api/products
+// @access  Public
 exports.aliasTopProducts = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-rating,price';
-  req.query.fields = 'name,price,rating,short_description,brand';
+  req.query.fields = 'name,price,image';
   next();
 };
 
@@ -37,7 +40,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 
 // @desc    Fetch a product
 // @route   GET /api/products/:id
-// @access  Public
+// @access  Private/admin
 exports.getProductById = asyncHandler(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
@@ -51,7 +54,7 @@ exports.getProductById = asyncHandler(async (req, res, next) => {
 
 // @desc    Create a product
 // @route   POST /api/products
-// @access  Public
+// @access  Private/admin
 exports.createProduct = asyncHandler(async (req, res, next) => {
   const product = new Product({
     name: 'Sample name',
@@ -71,7 +74,7 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
 
 // @desc    Update a product
 // @route   PATCH /api/products/:id
-// @access  Public
+// @access  Private/admin
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   console.log('Authenticated User:', req.user);
   const { name, price, description, image, brand, category, countInStock } =
@@ -98,14 +101,17 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 
 // @desc    Delete a product
 // @route   Delete /api/products/:id
-// @access  Public
+// @access  Private/admin
 exports.deleteProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.findByIdAndDelete(req.params.id);
 
-  res.status(204).json({
-    status: 'sucess',
-    data: null,
-  });
+  if (product) {
+    await Product.deleteOne({ _id: product._id });
+    res.status(200).json({ message: 'Product deleted' });
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
 });
 
 // @desc    Get product stats

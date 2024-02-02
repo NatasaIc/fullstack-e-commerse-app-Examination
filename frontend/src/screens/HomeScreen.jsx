@@ -3,6 +3,7 @@ import Product from './../components/Product';
 import { useGetProductsQuery } from '../slices/productsApiSlice';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import ProductCarousel from '../components/ProductCarousel';
 
 const HomeScreen = () => {
   // Using the 'useGetProductsQuery' hook from 'productsApiSlice' to fetch product data
@@ -12,6 +13,7 @@ const HomeScreen = () => {
 
   return (
     <>
+      <ProductCarousel />
       {isLoading ? (
         // Displaying a loading spinner if data is still being fetched
         <Loader />
