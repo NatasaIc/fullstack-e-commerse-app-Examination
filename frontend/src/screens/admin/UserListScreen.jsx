@@ -1,22 +1,22 @@
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Row, Col } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
+import { FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useGetUsersQuery } from '../../slices/usersApiSlice';
 import { toast } from 'react-toastify';
 
 const UserListScreen = () => {
-  const { data, isLoading, error, refetch } = useGetUsersQuery();
-  const users = data?.data?.users || [];
+  const { data: users, isLoading, error, refetch } = useGetUsersQuery();
   console.log(users);
+
+  const handleDelete = async (id) => {
+    console.log(users);
+  };
 
   return (
     <>
-      <Row>
-        <Col>
-          <h1>Users</h1>
-        </Col>
-      </Row>
+      <h1>Users</h1>
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -29,6 +29,7 @@ const UserListScreen = () => {
                 <th>ID</th>
                 <th>NAME</th>
                 <th>EMAIL</th>
+                <th>Admin</th>
                 <th>PHOTO</th>
                 <th></th>
               </tr>
@@ -38,13 +39,31 @@ const UserListScreen = () => {
                 users.map((user) => (
                   <tr key={user._id}>
                     <td>{user._id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
                     <td>{user.photo}</td>
+                    <td>{user.name}</td>
                     <td>
-                      <LinkContainer
-                        to={`/admin/user/${user._id}/edit`}
-                      ></LinkContainer>
+                      <a href={`mailto:${user.email}`}>{user.email}</a>
+                    </td>
+                    <td>
+                      {user.isAdmin ? (
+                        <FaCheck style={{ color: 'green' }} />
+                      ) : (
+                        <FaTimes style={{ color: 'red' }} />
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer to={`/admin/user/${user._id}/edit`}>
+                        <Button variant="light" className="brn-sm">
+                          <FaEdit />
+                        </Button>
+                      </LinkContainer>
+                      <Button
+                        variant="danger"
+                        className="btn-sm"
+                        onClick={() => handleDelete(user._id)}
+                      >
+                        <FaTrash style={{ color: 'white' }} />
+                      </Button>
                     </td>
                   </tr>
                 ))}
