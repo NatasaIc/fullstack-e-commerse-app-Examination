@@ -119,26 +119,61 @@ exports.updateUserProfile = asyncHandler(async (req, res, next) => {
 // @route   GET /api/users
 // @access  Privet/Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-  res.send('get all users');
+  const users = await User.find({});
+  res.status(200).json(users);
 });
 
 // @desc    Get User by ID
 // @route   GET /api/users/:id
 // @access  Privet/Admin
-exports.getUser = asyncHandler(async (req, res, next) => {
-  res.send('get user by ID');
+exports.getUserById = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id).select('-password');
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404);
+    throw new Error('User not found!');
+  }
 });
 
 // @desc    Update User
 // @route   PATCH /api/users/:id
 // @access  Privet/Admin
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  res.send('update user');
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.email || user.email;
+    user.isAdmin = Boolean(req.body.isAdmin);
+
+    const updatedUser = await user.save();
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found!');
+  }
 });
 
 // @desc    Delete User
 // @route   DELETE /api/users/:id
 // @access  Privet/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-  res.send('delete user');
+  const user = await User.findById(req.params.id);
+  if (user) {
+    if (user.isAdmin) {
+      res.status(400);
+      throw new Error("Super admin can't be deleted!");
+    }
+    await User.deleteOne({ _id: user._id });
+    res.status(200).json({ message: 'User deleted successfully' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
 });

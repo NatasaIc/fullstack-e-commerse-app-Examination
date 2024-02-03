@@ -20,7 +20,7 @@ router
   .post(userController.registerUser);
 router
   .route('/:id')
-  .get(protect, admin, userController.getUser)
+  .get(protect, admin, userController.getUserById)
   .patch(protect, admin, userController.updateUser)
   .delete(protect, admin, userController.deleteUser);
 
