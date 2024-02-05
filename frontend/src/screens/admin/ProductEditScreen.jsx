@@ -58,30 +58,35 @@ const ProductEditScreen = () => {
     }
   };
 
+  useEffect(() => {
+    if (product) {
+      console.log('Product Details:', product);
+      setName(product.name);
+      setPrice(product.price);
+      setImage(product.image);
+      setBrand(product.brand);
+      setCategory(product.category);
+      setCountInStock(product.countInStock);
+      setDescription(product.description);
+    }
+  }, [product]);
+
   const handleUploadFile = async (e) => {
     const formData = new FormData();
     formData.append('image', e.target.files[0]);
     try {
       const res = await uploadProductImage(formData).unwrap();
       toast.success(res.message);
-      setImage(res.image);
+      if (res.image !== undefined) {
+        setImage(res.image);
+      } else {
+        console.warn('Received undefined image in the response.');
+      }
     } catch (err) {
+      console.error('Error updating state:', err);
       toast.error(err?.data?.message || err.error);
     }
   };
-
-  useEffect(() => {
-    if (product) {
-      console.log(product);
-      setName(product.name || '');
-      setPrice(product.price || 0);
-      setImage(product.image || '');
-      setBrand(product.brand || '');
-      setCategory(product.category || '');
-      setCountInStock(product.countInStock || 0);
-      setDescription(product.description || '');
-    }
-  }, [product]);
 
   return (
     <>
@@ -131,7 +136,7 @@ const ProductEditScreen = () => {
                 onChange={handleUploadFile}
               />
             </Form.Group>
-
+            {loadingUpload && <Loader />}
             <Form.Group controlId="brand" className="my-3">
               <Form.Label>Brand</Form.Label>
               <Form.Control

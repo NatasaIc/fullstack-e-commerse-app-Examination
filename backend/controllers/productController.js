@@ -17,7 +17,7 @@ exports.aliasTopProducts = (req, res, next) => {
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
-exports.getAllProducts = asyncHandler(async (req, res, next) => {
+exports.getAllProducts = asyncHandler(async (req, res) => {
   let filter = {};
   if (req.params.tourId) filter = { tour: req.params.tourId };
   // EXECUTE QUERY
@@ -41,7 +41,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 // @desc    Fetch a product
 // @route   GET /api/products/:id
 // @access  Private/admin
-exports.getProductById = asyncHandler(async (req, res, next) => {
+exports.getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   res.status(200).json({
@@ -55,7 +55,7 @@ exports.getProductById = asyncHandler(async (req, res, next) => {
 // @desc    Create a product
 // @route   POST /api/products
 // @access  Private/admin
-exports.createProduct = asyncHandler(async (req, res, next) => {
+exports.createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: 'Sample name',
     price: 0,
@@ -75,7 +75,7 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
 // @desc    Update a product
 // @route   PATCH /api/products/:id
 // @access  Private/admin
-exports.updateProduct = asyncHandler(async (req, res, next) => {
+exports.updateProduct = asyncHandler(async (req, res) => {
   console.log('Authenticated User:', req.user);
   const { name, price, description, image, brand, category, countInStock } =
     req.body;
@@ -102,7 +102,7 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 // @desc    Delete a product
 // @route   Delete /api/products/:id
 // @access  Private/admin
-exports.deleteProduct = asyncHandler(async (req, res, next) => {
+exports.deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findByIdAndDelete(req.params.id);
 
   if (product) {
@@ -117,7 +117,7 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
 // @desc    Get product stats
 // @route   GET /api/products/product-stats
 // @access  Public
-exports.getProductStats = asyncHandler(async (req, res, next) => {
+exports.getProductStats = asyncHandler(async (req, res) => {
   const stats = await Product.aggregate([
     {
       $match: { rating: { $gte: 4.2 } },
