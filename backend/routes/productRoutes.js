@@ -21,4 +21,8 @@ router
   .patch(protect, admin, productController.updateProduct)
   .delete(protect, admin, productController.deleteProduct);
 
+router
+  .route('/:id/reviews')
+  .post(protect, productController.createProductReview);
+
 module.exports = router;
