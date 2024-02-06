@@ -3,17 +3,27 @@ import Product from './../components/Product';
 import { useGetProductsQuery } from '../slices/productsApiSlice';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
+import { Link, useParams } from 'react-router-dom';
 
 const HomeScreen = () => {
+  const { pageNumber, keyword } = useParams();
   // Using the 'useGetProductsQuery' hook from 'productsApiSlice' to fetch product data
-  const { data, isLoading, error } = useGetProductsQuery();
-  // Extracting the 'products' array from the fetched data, or initializing it as an empty array
-  const products = data?.data?.products || [];
+  const { data, isLoading, error } = useGetProductsQuery({
+    keyword,
+    pageNumber,
+  });
 
   return (
     <>
-      <ProductCarousel />
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to="/" className="btn btn-light mb-4">
+          Go Back
+        </Link>
+      )}
       {isLoading ? (
         // Displaying a loading spinner if data is still being fetched
         <Loader />
@@ -25,17 +35,22 @@ const HomeScreen = () => {
       ) : (
         // Rendering the main content if data fetching is successful
         <>
-          <h1>Latest Products</h1>
+          <h1 className="mb-4">Latest Products</h1>
           <Row>
             {/* Mapping through the 'products' array and rendering a Product component for each product */}
-            {Array.isArray(products) &&
-              products.map((product) => (
-                <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                  {/* Passing the product data as a prop to the Product component */}
-                  <Product product={product} />
-                </Col>
-              ))}
+
+            {data.products.map((product) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                {/* Passing the product data as a prop to the Product component */}
+                <Product product={product} />
+              </Col>
+            ))}
           </Row>
+          <Paginate
+            pages={data.pages}
+            page={data.page}
+            keyword={keyword ? keyword : ''}
+          />
         </>
       )}
     </>

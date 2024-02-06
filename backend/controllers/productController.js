@@ -18,24 +18,19 @@ exports.aliasTopProducts = (req, res, next) => {
 // @route   GET /api/products
 // @access  Public
 exports.getAllProducts = asyncHandler(async (req, res) => {
-  let filter = {};
-  if (req.params.tourId) filter = { tour: req.params.tourId };
-  // EXECUTE QUERY
-  const features = new APIFeatures(Product.find(filter), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const products = await features.query;
+  const pageSize = 6;
+  const page = Number(req.query.pageNumber) || 1;
 
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: products.length,
-    data: {
-      products,
-    },
-  });
+  const keyword = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: 'i' } }
+    : {};
+
+  const count = await Product.countDocuments({ ...keyword });
+
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Fetch a product
@@ -150,6 +145,7 @@ exports.getProductStats = asyncHandler(async (req, res) => {
 // @access  Private
 exports.createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
+
   const product = await Product.findById(req.params.id);
 
   if (product) {
@@ -167,6 +163,9 @@ exports.createProductReview = asyncHandler(async (req, res) => {
       comment,
       user: req.user._id,
     };
+
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
 
     product.rating =
       product.reviews.reduce((acc, item) => item.rating + acc, 0) /
