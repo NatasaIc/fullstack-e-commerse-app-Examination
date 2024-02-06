@@ -1,4 +1,6 @@
-﻿This project is a part of my examination for the degree in webdevelopment in e-commerce at medieinstitutet in Stockholm. It is a full- featured shopping cart with PayPal & credit/debit payments.
+﻿<img src='./frontend//src//assets//E (3).png' alt="Logo" height="100"/>
+
+As part of my assessment for the Web Development in E-commerce program at Medieinstitutet in Stockholm, I've undertaken a comprehensive project. It is a full- featured shopping cart with PayPal & credit/debit payments. As the zenith of my full-stack development journey, this project serves as my final exam in e-commerce, built with the MERN stack incorporating Redux Toolkit alongside MongoDB Atlas for seamless management of product listings, orders, and user authentication.
 
 <!-- toc -->
 
@@ -26,6 +28,10 @@ Mark orders as delivered option
 Checkout process (shipping, payment method, etc)
 PayPal / credit card integration
 Database seeder (products & users)
+
+## Dependencies
+
+# Frontend
 
 ## Usage
 
