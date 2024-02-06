@@ -1,6 +1,17 @@
 ﻿This project is a part of my examination for the degree in webdevelopment in e-commerce at medieinstitutet in Stockholm. It is a full- featured shopping cart with PayPal & credit/debit payments.
 
-# Fetures
+<!-- toc -->
+
+- [Features](#features)
+- [Usage](#usage)
+  - [Install](#install)
+  - [Run](#run)
+- [Build & Deploy](#build--deploy)
+- [Seeding Data](#seeding-data)
+
+<!-- tocstop -->
+
+## Fetures
 
 Full featured shopping cart
 Product reviews and ratings
@@ -16,19 +27,19 @@ Checkout process (shipping, payment method, etc)
 PayPal / credit card integration
 Database seeder (products & users)
 
-# Usage
+## Usage
 
 1. Clone the repository:
    https://github.com/NatasaIc/fullstack-e-commerse-app-Examination.git
 2. Place the provided config.env file in the root of the project
 
-# Install
+## Install
 
 npm install
 cd frontend
 npm install
 
-# Run
+## Run
 
 Run frontend and backend
 npm run dev
@@ -36,15 +47,17 @@ npm run dev
 Backend only
 npm run server
 
-# Build & Deploy
+## Build & Deploy
 
 cd frontend
 npm run build
 
-# Seeding Data
+## Seeding Data
 
+```
 Import data:
 node backend/data/import-dev-data.js --import
 
 Delete data:
 node backend/data/import-dev-data.js --delete
+```
