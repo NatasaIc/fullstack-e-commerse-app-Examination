@@ -18,16 +18,9 @@ Database seeder (products & users)
 
 # Usage
 
-Create a MongoDB database and obtain your MongoDB URI - MongoDB Atlas
-Create a PayPal account and obtain your Client ID - PayPal Developer
-
-# ENV Variables
-
-NODE_ENV=production
-PORT = 8000
-MONGO_URI = your mongodb uri
-JWT_SECRET = 'abc123'
-PAYPAL_CLIENT_ID = your paypal client id
+1. Clone the repository:
+   https://github.com/NatasaIc/fullstack-e-commerse-app-Examination.git
+2. Place the provided config.env file in the root of the project
 
 # Install
 
