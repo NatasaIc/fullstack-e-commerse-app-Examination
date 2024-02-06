@@ -1,4 +1,4 @@
-﻿<img src='./frontend//src//assets//E (3).png' alt="Logo" height="100"/>
+﻿<img src='./frontend//src//assets//E (3).png' alt="Logo"/>
 
 As part of my assessment for the Web Development in E-commerce program at Medieinstitutet in Stockholm, I've undertaken a comprehensive project. It is a full- featured shopping cart with PayPal & credit/debit payments. As the zenith of my full-stack development journey, this project serves as my final exam in e-commerce, built with the MERN stack incorporating Redux Toolkit alongside MongoDB Atlas for seamless management of product listings, orders, and user authentication.
 
