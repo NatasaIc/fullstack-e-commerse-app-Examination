@@ -54,10 +54,25 @@ npm run build
 
 ## Seeding Data
 
+You can use the following commands to seed the database with some sample users and products as well as destroy all data
+
 ```
 Import data:
 node backend/data/import-dev-data.js --import
 
 Delete data:
 node backend/data/import-dev-data.js --delete
+```
+
+Sample user login
+
+```
+email: admin@example.com
+password: 123456
+
+email: loulou@example.com
+password: 123456
+
+email: leo@example.com
+password: 123456
 ```
