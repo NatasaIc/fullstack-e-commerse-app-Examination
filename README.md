@@ -34,12 +34,9 @@ As part of my assessment for the Web Development in E-commerce program at Mediei
 - PayPal / credit card integration
 - Database seeder (products & users)
 
-## Dependencies
+<details>
+<summary><b>Backend Dependencies:</b></summary>
 
-### <details>
-
-<summary>Backend:</summary>
-<br>
 - bcryptjs: ^2.4.3
 - cookie-parser: ^1.4.6
 - dotenv: ^16.3.1
@@ -50,11 +47,10 @@ As part of my assessment for the Web Development in E-commerce program at Mediei
 - morgan: ^1.10.0
 - nodemon: ^3.0.2
 - validator: ^13.11.0
+
 </details>
 
 ### Frontend:
-
----
 
 - @paypal/react-paypal-js: ^8.1.3
 - @reduxjs/toolkit: ^2.0.1
@@ -67,6 +63,8 @@ As part of my assessment for the Web Development in E-commerce program at Mediei
 - react-router-dom: ^6.21.2
 - react-scripts: 5.0.1
 - react-toastify: ^10.0.4
+
+---
 
 #### Usage
 
