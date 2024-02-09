@@ -1,6 +1,8 @@
 import { apiSlice } from './apiSlice';
 import { ORDERS_URL, PAYPAL_URL } from '../constants';
 
+//orderController and orderSlice: addItemsToOrder in orderControllers creates a new order with specified products, user and order details.
+
 // Injecting API endpoint for order-related actions into the 'apiSlice'
 export const ordersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

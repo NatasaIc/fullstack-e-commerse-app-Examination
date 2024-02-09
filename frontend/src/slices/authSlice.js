@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// UserController and authSlice: Handles user authentication by checking the email and password against the stored user data.
+// If it is successful it generates a token useing the generateTokan utility in the backend, and sends the cookie in the response.
+
 // Initial state for the auth slice, extracting user info from local storage or defaulting to null
 const initialState = {
   userInfo: localStorage.getItem('userInfo')

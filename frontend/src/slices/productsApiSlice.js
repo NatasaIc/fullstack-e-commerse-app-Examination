@@ -1,6 +1,8 @@
 import { PRODUCTS_URL, UPLOAD_URL } from '../constants';
 import { apiSlice } from './apiSlice';
 
+// productApiSlice and userApiSlice: Defines endpoints that interact with extarnal services such as creating an order or collectiong paypal.
+
 // Injecting API endpoints for product-related actions into the 'apiSlice'
 export const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

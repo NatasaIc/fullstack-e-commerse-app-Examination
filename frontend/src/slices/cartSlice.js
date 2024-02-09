@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { updateCart } from '../utils/cartUtils';
 
+// AuthSlice and cartSlice: Auth handles authentication state, including setting up user credentials and logging out.
+
 // Retrieve the cart data from local storage or initialize an empty cart
 const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))

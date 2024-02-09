@@ -17,21 +17,27 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log('Connection successful'));
+
 // IMPORT DATA INTO DATABASE
 const importData = async () => {
   try {
+    // Deleting existing data in collections
     await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
 
+    // Inserting users into the database and retrieving the created users
     const createdUsers = await User.insertMany(users);
 
+    // Extracting the id of the first user (assumed to be an admin user)
     const adminUser = createdUsers[0]._id;
 
+    // Mapping over product data to add admin user to each product
     const sampleProducts = products.map((product) => {
       return { ...product, user: adminUser };
     });
 
+    // Inserting products into the database
     await Product.insertMany(sampleProducts);
 
     process.exit();
