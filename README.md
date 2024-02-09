@@ -50,7 +50,8 @@ As part of my assessment for the Web Development in E-commerce program at Mediei
 
 </details>
 
-### Frontend:
+<details>
+<summary><b>Frontend Dependencies:</b></summary>
 
 - @paypal/react-paypal-js: ^8.1.3
 - @reduxjs/toolkit: ^2.0.1
@@ -64,9 +65,11 @@ As part of my assessment for the Web Development in E-commerce program at Mediei
 - react-scripts: 5.0.1
 - react-toastify: ^10.0.4
 
+</details>
+
 ---
 
-#### Usage
+## Usage
 
 1. Clone the repository:
 
@@ -79,7 +82,7 @@ https://github.com/NatasaIc/fullstack-e-commerse-app-Examination.git
 
 ```
 
-#### Installation
+## Installation
 
 ```
 
@@ -89,9 +92,7 @@ npm install
 
 ```
 
-#### Running
-
----
+## Running
 
 Run both frontend and backend:
 
@@ -105,9 +106,7 @@ Run backend only:
 npm run server
 ```
 
-#### Build & Deploy
-
----
+## Build & Deploy
 
 To build the frontend for deployment:
 
@@ -116,16 +115,16 @@ cd frontend
 npm run build
 ```
 
-#### Seed Data
+## Seed Data
 
 You can use the following commands to seed the database with some sample users and products as well as destroy all data:
 
 ```
-#### Import data:
+Import data:
 
 node backend/data/import-dev-data.js --import
 
-#### Delete data:
+Delete data:
 
 node backend/data/import-dev-data.js --delete
 ```
@@ -143,7 +142,7 @@ email: leo@example.com
 password: 123456
 ```
 
-##### Troubleshooting
+### Troubleshooting
 
 If you encounter any issues during installation or setup, pleas check the following troubleshooting steps:
 
