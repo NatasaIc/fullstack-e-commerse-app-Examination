@@ -12,11 +12,12 @@ const PaymentScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart); // Selecting cart state from Redux store
 
-  const { shippingAddress } = cart;
+  const { shippingAddress } = cart; // Destructuring shipping address from cart
 
   useEffect(() => {
+    // Redirect to shipping screen if shipping address is not provided
     if (!shippingAddress.address) {
       navigate('/shipping');
     }
@@ -24,13 +25,13 @@ const PaymentScreen = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(savePaymentMethod(paymentMethod));
+    dispatch(savePaymentMethod(paymentMethod)); // Save payment method to Redux store
     navigate('/placeorder');
   };
 
   return (
     <FormContainer>
-      <CheckoutSteps step1 step2 step3 />
+      <CheckoutSteps step1 step2 step3 /> {/* Display checkout steps */}
       <h1>Payment Method</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group>

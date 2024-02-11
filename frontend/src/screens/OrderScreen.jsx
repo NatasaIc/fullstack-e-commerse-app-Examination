@@ -20,24 +20,25 @@ const OrderScreen = () => {
     refetch,
     isLoading: loadingOrder,
     error: errorOrder,
-  } = useGetOrderDetailsQuery(orderId);
+  } = useGetOrderDetailsQuery(orderId); // Querying order details
 
-  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation(); // Mutation hook for paying order
 
   const [deliverOrder, { isLoading: loadingDeliver }] =
-    useDeliverOrderMutation();
+    useDeliverOrderMutation(); // Mutation hook for delivering order
 
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer(); // PayPal script reducer hook
 
   const {
     data: paypal,
     isLoading: loadingPayPal,
     error: errorPaypal,
-  } = useGetPaypalClientIdQuery();
+  } = useGetPaypalClientIdQuery(); // Querying PayPal client ID
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth); // Selecting user info from Redux store
 
   useEffect(() => {
+    // Load PayPal script when PayPal client ID is available
     if (!errorPaypal && !loadingPayPal && paypal.clientId) {
       const loadPayPalScript = async () => {
         paypalDispatch({
@@ -58,6 +59,7 @@ const OrderScreen = () => {
   }, [order, paypal, paypalDispatch, loadingPayPal, errorPaypal]);
 
   function onApprove(data, actions) {
+    // Handle payment approval
     return actions.order.capture().then(async function (details) {
       try {
         await payOrder({ orderId, details });
@@ -69,17 +71,12 @@ const OrderScreen = () => {
     });
   }
 
-  // async function onApproveTest() {
-  //   await payOrder({ orderId, details: { payer: {} } });
-  //   refetch();
-  //   toast.success('Payment successful');
-  // }
-
   function onError(err) {
     toast.error(err.message);
   }
 
   function createOrder(data, actions) {
+    // Create order
     return actions.order
       .create({
         purchase_units: [
@@ -96,6 +93,7 @@ const OrderScreen = () => {
   }
 
   const handleDeliverOrder = async () => {
+    // Handle delivery of order
     try {
       await deliverOrder(orderId);
       refetch();
@@ -105,9 +103,9 @@ const OrderScreen = () => {
     }
   };
 
-  return loadingOrder ? (
+  return loadingOrder ? ( // Display loader if loading order
     <Loader />
-  ) : errorOrder ? (
+  ) : errorOrder ? ( // Display error message if order retrieval fails
     <Message variant="danger" />
   ) : (
     <>

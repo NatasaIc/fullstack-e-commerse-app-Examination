@@ -18,9 +18,11 @@ const CartScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Retrieve cart items from Redux store
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
+  // Define functions to handle adding/removing items from the cart
   const handleAddToCart = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
   };
@@ -29,6 +31,7 @@ const CartScreen = () => {
     dispatch(removeFromCart(id));
   };
 
+  // Define function to handle checkout
   const handleCheckout = () => {
     navigate('/login?redirect=/shipping');
   };

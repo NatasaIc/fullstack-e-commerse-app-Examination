@@ -11,6 +11,7 @@ As part of my assessment for the Web Development in E-commerce program at Mediei
 - [Usage](#usage)
   - [Installation](#installation)
   - [Running](#running)
+- [Place an order](#place-an-order)
 - [Build & Deploy](#build--deploy)
 - [Seed Data](#seeding-data)
 - [Sample User Logins](#sample-user-logins)
@@ -105,6 +106,17 @@ Run backend only:
 ```
 npm run server
 ```
+
+---
+
+<details>
+<summary><b>Place an order:</b></summary>
+* Add products to cart by clicking on "Add to Cart" button
+* Navigate to the checkout page
+* Fill out all required fields (shipping address, payment details)
+* Select PayPal as payment pethod
+* Login to Paypal sandbox account: You will be redirected to the PayPal login page. If they don't have a PayPal account, you can create a sandbox account for testing purposes. Otherwise, you can log in with your existing sandbox PayPal account.
+</details>
 
 ## Build & Deploy
 

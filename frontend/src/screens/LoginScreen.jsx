@@ -15,9 +15,9 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation(); // Mutation hook for login
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth); // Selecting user info from Redux store
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -32,7 +32,9 @@ const LoginScreen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Call login mutation
       const res = await login({ email, password }).unwrap();
+      // Dispatch action to set user credentials
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
     } catch (err) {

@@ -21,11 +21,14 @@ const ProfileScreen = () => {
   // UserInfo is comming from the global state
   const { userInfo } = useSelector((state) => state.auth);
 
+  // Fetch user profile mutation hook
   const [updateProfile, { isLoading: loadingUpdateProfile }] =
     useProfileMutation();
 
+  // Fetch user orders query hook
   const { data: orders, isLoading, error } = useGetMyOrdersQuery();
 
+  // Populate profile form with user info on component load
   useEffect(() => {
     if (userInfo) {
       setName(userInfo.name);
@@ -33,18 +36,21 @@ const ProfileScreen = () => {
     }
   }, [userInfo, userInfo.name, userInfo.email]);
 
+  // Handle form submission to update user profile
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       toast.error('Passwoerd do not match');
     } else {
       try {
+        // Update user profile
         const res = await updateProfile({
           _id: userInfo._id,
           name,
           email,
           password,
         }).unwrap();
+        // Update user credentials in Redux store
         dispatch(setCredentials(res));
         toast.success('Profile updated successfully');
       } catch (err) {

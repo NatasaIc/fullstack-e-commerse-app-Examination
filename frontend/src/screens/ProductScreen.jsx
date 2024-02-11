@@ -31,20 +31,16 @@ const ProductScreen = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
-  const handleAddToCart = () => {
-    dispatch(addToCart({ ...product, qty }));
-    navigate('/cart');
-  };
-
   const { data, isLoading, refetch, error } =
     useGetProductDetailsQuery(productId);
-  const product = data?.data?.product || {};
+  const product = data?.data?.product || {}; // Extracting product data
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth); // Selecting user info from Redux store
 
   const [createReview, { isLoading: loadingProdReview }] =
     useCreateReveiewMutation();
 
+  // Function to handle form submission for creating a review
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -52,14 +48,20 @@ const ProductScreen = () => {
         productId,
         rating,
         comment,
-      }).unwrap();
-      refetch();
+      }).unwrap(); // Creating review
+      refetch(); // Refreshing product details
       toast.success('Review Submitted');
       setRating(0);
       setComment('');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
+  };
+
+  // Function to handle adding product to cart
+  const handleAddToCart = () => {
+    dispatch(addToCart({ ...product, qty }));
+    navigate('/cart');
   };
 
   return (

@@ -14,9 +14,10 @@ const PlaceOrderScreen = () => {
 
   const cart = useSelector((state) => state.cart);
 
-  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation(); // Mutation hook for creating order
 
   useEffect(() => {
+    // Redirect to shipping screen if shipping address is not provided or payment method is not selected
     if (!cart.shippingAddress.address) {
       navigate('/shipping');
     } else if (!cart.paymentMethod) {
@@ -27,6 +28,7 @@ const PlaceOrderScreen = () => {
   const dispatsh = useDispatch();
 
   const handlePlaceOrder = async () => {
+    // Handle placing order
     try {
       const res = await createOrder({
         orderItems: cart.cartItems,
@@ -37,7 +39,7 @@ const PlaceOrderScreen = () => {
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
-      dispatsh(clearCartItems());
+      dispatsh(clearCartItems()); // Clear cart items from Redux store
       navigate(`/order/${res._id}`);
     } catch (err) {
       toast.error(err);
@@ -46,7 +48,7 @@ const PlaceOrderScreen = () => {
 
   return (
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <CheckoutSteps step1 step2 step3 step4 /> {/* Display checkout steps */}
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
